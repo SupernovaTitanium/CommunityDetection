@@ -23,5 +23,6 @@ Info:
       3:If you find "libstdc++.so.6: version `GLIBCXX_3.4.20' not found" during make, try to add
 		
 	"export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libstdc++.so.6" to the shell.
+  	"export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/dhome/supernova/locallib/lib"
  
 
