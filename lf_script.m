@@ -18,11 +18,12 @@ if unbalanced == 1
 end
 R = 1 ./ (1+exp(-Z_true*W_true));
 Rb = double(rand(n,n) < R);
-ratio = 1-(sum(sum(Rb))/(n*n))
+
+ratio = 1-(sum(sum(Rb)))/(n*n);
 
 
 
-Sr = double(rand(n,n) > 1-sample_rate);
+Sr = double(rand(n,n) > 1-sample_rate); 
 
 E = Z_true*W_true;
 
@@ -33,10 +34,10 @@ R1 = sparse(Rb.*Sr);
 R0 = sparse((1-Rb).*Sr);
 
 lambda = 0.1;
-T = 500;
+T = 300;
 threshold = [0.5];
 tic;
 [c, Z_guess,W_guess] = LFlasso(Rb,1-Sr,R0,R1,lambda,Z_true,W_true,T,threshold,unbalanced);
 toc;
 %[c, Z_guess,W_guess] = LFlasso_over(R0,R1,lambda,Z_true,W_true,T,threshold);
-R_guess = double(1./(1+exp(-Z_guess*W_guess))>0.5);
+%R_guess = double(1./(1+exp(-Z_guess*W_guess))>0.5);
