@@ -1,10 +1,10 @@
 Synthetic
 mean = 0
 var = 0
-tunningI = 100
+tunningI = 1
 Z_dim_1 = 100
 Z_dim_2 = 10
-Z_sparsity = 0.1
+Z_sparsity = 0.2  
 ground_truth_existence = 1
 noisy = 1
 positive_sample_rate = 1

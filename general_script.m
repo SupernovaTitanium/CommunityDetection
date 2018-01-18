@@ -64,11 +64,13 @@ function [] = general_script(set_file_path)
 			Z_true(i,rand1(1:nnz_row)) = 1;
 		end
 		I = eye(k);
-		V = syn_parameter(1,3)*I + normrnd(syn_parameter(1,1),syn_parameter(1,2),k,k);		
+		M = normrnd(syn_parameter(1,1),syn_parameter(1,2),k,k);
+		V = syn_parameter(1,3)*I + (M+M')/2;
 		W_true = V*Z_true';
 		S = Z_true*W_true;
 		R = 1 ./ (1+exp(-S));
-		Rb = double(rand(n,n) < R);
+		M2 = rand(n,n);
+		Rb = double( (M2+M2')/2 < R);
 		positive_edge = sum(sum(Rb))
 		negative_edge = n*n-sum(sum(Rb))
 		sample_positive_edge = positive_edge*parameter(1,3)
