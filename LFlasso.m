@@ -8,50 +8,60 @@
 %%
 %% Our solver reterns c and Z=[z_1,...,z_k] s.t.  M=\sum_j c_j* z_jz_j'.
 
-function  [c, Z,W] = LFlasso(R_true,R_test,R0_sp,R1_sp,lambda,Z0,W0,T,threshold,unbalanced)
+function  [nmi_g,em_g,Z,W] = LFlasso(R_true,R_test,R0_sp,R1_sp,parameter,Z0,W0,datatype,out)
 
+%setting parameter
+ground_truth_existence = parameter(1,1);
+noisy = parameter(1,2);
+threshold = parameter(1,5);
+T=parameter(1,6);
+lambda =parameter(1,7);
+TOL = parameter(1,8);
+tol_rate = parameter(1,9);
+T2 =parameter(1,10);
+SDP_rank = parameter(1,11);
+SDP_iter = parameter(1,12);
+mu = parameter(1,13);
+stepsize = parameter(1,14);
+mod_num = parameter(1,15);
 
-
-TOL = 1e-5;
-T2 = 30;
-SDP_rank = 10;
-SDP_iter = 100;
-mu = 100000;
-
-
+nmi_g = zeros(1,3);
+em_g = zeros(1,4);
 
 f = @(Z1,z0,thd) sum( Z1~=(z0*ones(1,size(Z1,2))) ) <= thd;
 n = size(R0_sp,1);
-k_up= size(W0,1);
+
 Z = [];
 c = [];
 W =[];
-tol_rate = 0.01;
 best_auc= 0;
-stepsize=1e-2;
 
 
 
-name = strcat('N_',num2str(n),'_K_',num2str(k_up),'_unbalanced_',num2str(unbalanced)); 
-if(7 ~= exist(name,'dir'))
-	mkdir(name);
-end
-outname = strcat('SDP_',num2str(SDP_rank),'_',num2str(SDP_iter),'_lambda_',num2str(lambda),'_stepsize_',num2str(stepsize),'_mu_',num2str(mu)); 
-out = fopen(strcat(name,'/',outname),'w');
+
+
 %first calculate modularity matrix B
-B = full(R1_sp); %shoulp be in sparse format?
+B = full(R1_sp); 
 m = sum(sum(B));
 degree = sum(B,2);
 BB = (degree*degree')/(2*m);
 B = B-BB;
 
-
-
-
-
-
-
-
+Z0n = sum(Z0,2);
+Z0n(Z0n < 1)=1;
+Z0n = repmat(Z0n,1,size(Z0,2));
+Z4 = Z0./(Z0n);
+em_g(4) = 1/(2*m)*(sum(sum(B.*(Z4*Z4'))));
+gem = em_g(4);
+% pending for boosting 
+%can actually calculate groundtruth guess
+Rt_guess=0;
+g_auc=0;
+if(strcmp(datatype,'Synthetic'))
+	Rt_guess = 1./(1+exp(-Z0*W0));
+	[~,~,~,~,~,g_auc] = all_statistic(R_true,R_test,Rt_guess,Z0,1,threshold);
+	%Z0 is actually dummy variable in all_statistics
+end	
 for t = 1:T
 
 
@@ -109,9 +119,11 @@ for t = 1:T
 	%shrink c and Z for j:cj=0
 	Z = Z(:,c'>TOL);
 	c = c(c>TOL);
-	
+	[obj,~,~] = LFLassoObj(R0_sp,R1_sp,lambda,Z,c);
+	obj
 	%dump info
-	if mod(t,10)==0
+
+	if mod(t,mod_num)==0
 			%M = compute_M(c,Z);
 			%obj = boolLassoObj(R,lambda,M,c, beta);
 
@@ -123,38 +135,88 @@ for t = 1:T
 			P = [match;c'];
 			P
 			[~,ind] = sort(c,'descend');
-			for K0 = min(2,length(c)):1:min(k_up,length(c))
-				Z2 = Z(:,ind(1:min(end,K0)));
-				% compute mutual information
-			 nmi = normalized_mutual_information(Z0,Z2,1);
-				% compute extended modularity 
-				Z3n = sum(Z2,2);
-				Z3n = repmat(Z3n,1,size(Z2,2));
-				Z3 = Z2./(Z3n);
-             	em = 1/(2*m)*sum(sum(B.*(Z3*Z3')));
-
-
-
-                %
-				c2 = c(ind(1:min(end,K0))); 
-				[obj,R_guess,W] = LFLassoObj(R0_sp,R1_sp,lambda,Z2,c2);
-				% [obj,R_guess,W] = LFLassoObj(R0_sp,R1_sp,lambda,Z,c);
-				Rt_guess = 1./(1+exp(-Z0*W0));
-				[acc,rec,prec,F1,F1_2,auc] = all_statistic(R_true,R_test,R_guess,Z2,1,threshold);
-				[~,~,~,~,~,g_auc] = all_statistic(R_true,R_test,Rt_guess,Z2,1,threshold);
-				% [acc,rec,prec,F1,F1_2,auc] = all_statistic(R_true,R_test,R_guess,Z,1,threshold);
-				% [~,~,~,~,~,g_auc] = all_statistic(R_true,R_test,Rt_guess,Z,1,threshold);
-				fprintf('t=%f nmi=%f em=%f\n',t,nmi,em);
-				fprintf(out,'t=%f nmi=%f em=%f\n',t,nmi,em);
-				fprintf('t=%f auc=%f g_auc=%f obj=%f\n',t,auc,g_auc,obj);
-				fprintf(out,'t=%f auc=%f g_auc=%f obj=%f\n',t,auc,g_auc,obj);
-				for u=1:length(threshold)
-					fprintf('threshold=%f K0=%d acc=%f prec=%f rec=%f F1=%f F1_2=%f\n',threshold(u),size(Z2,2),acc(u),prec(u),rec(u),F1(u),F1_2(u));
-					% fprintf('threshold=%f K=%d acc=%f prec=%f rec=%f F1=%f F1_2=%f\n',threshold(u),size(Z2,2),acc(u),prec(u),rec(u),F1(u),F1_2(u));
-					fprintf(out,'threshold=%f K0=%d acc=%f prec=%f rec=%f F1=%f F1_2=%f\n',threshold(u),size(Z2,2),acc(u),prec(u),rec(u),F1(u),F1_2(u));
-				end	
-				if  auc > best_auc 
-					best_auc = auc;
+			if(noisy == 1)
+				for K0 = min(2,length(c)):1:length(c)
+					Z2 = Z(:,ind(1:min(end,K0)));
+					c2 = c(ind(1:min(end,K0))); 
+					[obj,R_guess,W] = LFLassoObj(R0_sp,R1_sp,lambda,Z2,c2);
+					[acc,rec,prec,F1,F1_2,auc] = all_statistic(R_true,R_test,R_guess,Z2,1,threshold);
+					if(strcmp(datatype,'Synthetic'))				
+						% compute mutual information
+						nmi = normalized_mutual_information(Z0,Z2,1);
+						% compute extended modularity 
+						Z3n = sum(Z2,2);
+						Z3n(Z3n < 1)=1;
+						Z3n = repmat(Z3n,1,size(Z2,2));
+						% Z0n = sum(Z0,2);
+						% Z0n = repmat(Z0n,1,size(Z0,2));
+						Z3 = Z2./(Z3n);
+						% Z4 = Z0./(Z0n);
+		             	em = 1/(2*m)*(sum(sum(B.*(Z3*Z3'))));
+		             	% gem = 1/(2*m)*(sum(sum(B.*(Z4*Z4'))));
+		             	fprintf('t=%f nmi=%f em=%f groundtruth_em=%f\n',t,nmi,em,gem);
+						fprintf(out,'t=%f nmi=%f em=%f\n groundtruth_em=%f\n',t,nmi,em,gem);
+						if(nmi>nmi_g(1))
+							nmi_g(1) = nmi;
+							nmi_g(2) = t;
+							nmi_g(3) = K0;
+						end
+						if(em > em_g(1))
+							em_g(1) = em;
+							em_g(2) = t;
+							em_g(3) = K0;
+						end
+						fprintf('t=%f auc=%f g_auc=%f obj=%f\n',t,auc,g_auc,obj);
+						fprintf(out,'t=%f auc=%f g_auc=%f obj=%f\n',t,auc,g_auc,obj);
+					elseif(ground_truth_existence == 1 )
+						% compute mutual information
+						nmi = normalized_mutual_information(Z0,Z2,1);
+						% compute extended modularity 
+						Z3n = sum(Z2,2);
+						Z3n(Z3n < 1) = 1;
+						Z3n = repmat(Z3n,1,size(Z2,2));
+						% Z0n = sum(Z0,2);
+						% Z0n = repmat(Z0n,1,size(Z0,2));
+						Z3 = Z2./(Z3n);
+						% Z4 = Z0./(Z0n);
+		             	em = 1/(2*m)*(sum(sum(B.*(Z3*Z3'))));
+		             	% gem = 1/(2*m)*(sum(sum(B.*(Z4*Z4'))));
+		             	fprintf('t=%f nmi=%f em=%f groundtruth_em=%f\n',t,nmi,em,gem);
+						fprintf(out,'t=%f nmi=%f em=%f\n groundtruth_em=%f\n',t,nmi,em,gem);
+						if(nmi>nmi_g(1))
+							nmi_g(1) = nmi;
+							nmi_g(2) = t;
+							nmi_g(3) = K0;
+						end
+						if(em > em_g(1))
+							em_g(1) = em;
+							em_g(2) = t;
+							em_g(3) = K0;
+						end
+					else
+						% compute extended modularity 
+						Z3n = sum(Z2,2);
+						Z3n(Z3n < 1) = 1;
+						Z3n = repmat(Z3n,1,size(Z2,2));
+						Z3 = Z2./(Z3n);
+					   	em = 1/(2*m)*(sum(sum(B.*(Z3*Z3'))));
+		              	fprintf('t=%f em=%f\n',t,em);
+						fprintf(out,'t=%f em=%f\n',t,em);
+						if(em > em_g(1))
+							em_g(1) = em;
+							em_g(2) = t;
+							em_g(3) = K0;
+						end
+					end		
+					%print other statistical information
+					for u=1:length(threshold)
+						fprintf('threshold=%f K0=%d acc=%f prec=%f rec=%f F1=%f F1_2=%f\n',threshold(u),size(Z2,2),acc(u),prec(u),rec(u),F1(u),F1_2(u));
+						% fprintf('threshold=%f K=%d acc=%f prec=%f rec=%f F1=%f F1_2=%f\n',threshold(u),size(Z2,2),acc(u),prec(u),rec(u),F1(u),F1_2(u));
+						fprintf(out,'threshold=%f K0=%d acc=%f prec=%f rec=%f F1=%f F1_2=%f\n',threshold(u),size(Z2,2),acc(u),prec(u),rec(u),F1(u),F1_2(u));
+					end	
+					% if  auc > best_auc 
+					% 	best_auc = auc;
+					% end
 				end
 			end
 	end
