@@ -69,8 +69,10 @@ function [] = general_script(set_file_path)
 		W_true = V*Z_true';
 		S = Z_true*W_true;
 		R = 1 ./ (1+exp(-S));
+		%mean(mean(R))
 		M2 = rand(n,n);
 		Rb = double( (M2+M2')/2 < R);
+		%nnz(Rb)
 		positive_edge = sum(sum(Rb))
 		negative_edge = n*n-sum(sum(Rb))
 		sample_positive_edge = positive_edge*parameter(1,3)
