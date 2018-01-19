@@ -42,7 +42,7 @@ best_auc= 0;
 
 %first calculate modularity matrix B
 B = full(R1_sp); 
-m = sum(sum(B));
+m = sum(sum(B))/2;
 degree = sum(B,2);
 BB = (degree*degree')/(2*m);
 B = B-BB;
@@ -168,6 +168,8 @@ for t = 1:T
 						end
 						fprintf('t=%f auc=%f g_auc=%f obj=%f\n',t,auc,g_auc,obj);
 						fprintf(out,'t=%f auc=%f g_auc=%f obj=%f\n',t,auc,g_auc,obj);
+						%save('tmp');
+						%exit(0);
 					elseif(ground_truth_existence == 1 )
 						% compute mutual information
 						nmi = normalized_mutual_information(Z0,Z2,1);

@@ -78,13 +78,15 @@ function [] = general_script(set_file_path)
 		sample_positive_edge = positive_edge*parameter(1,3)
 		sample_negative_edge = positive_edge*parameter(1,4)
 		positive_ratio = sample_positive_edge/positive_edge;  
-		negative_ratio = floor(sample_negative_edge/negative_edge);
+		negative_ratio = min(sample_negative_edge/negative_edge,1);
 		Sp = double(rand(n,n) > 1-positive_ratio);
 		Sn = double(rand(n,n) > 1-negative_ratio);
 		%deal with sample rate
 		R1 = sparse(Rb.*Sp);
 		R0 = sparse((1-Rb).*Sn);
 		Sr = ones(n,n);
+		%save('tmp1');
+		%exit(0);
 		if(7 ~= exist('Result','dir'))
 			mkdir('Result');
 		end
