@@ -14,12 +14,15 @@ MEX_EXT = $(shell $(MATLABDIR)/bin/mexext)
 MAXCUTdir ?= MixingSDPSolve
 MAXCUTlocal ?= $(MAXCUTdir)/MixMaxCutSparseAAT.cpp
 MAXCUTlocal2 ?= $(MAXCUTdir)/MixMaxCut.cpp
-all: clean w_solver.$(MEX_EXT) MixMaxCutSparseAAT.$(MEX_EXT) all_statistic.$(MEX_EXT) MixMaxCut.$(MEX_EXT)
+MAXCUTlocal3 ?= $(MAXCUTdir)/MixMaxCutComposite.cpp
+all: clean w_solver.$(MEX_EXT) MixMaxCutSparseAAT.$(MEX_EXT) all_statistic.$(MEX_EXT) MixMaxCut.$(MEX_EXT) MixMaxCutComposite.$(MEX_EXT)
 
 w_solver.$(MEX_EXT): w_solver.cpp 
 	$(MEX) $(MEX_OPTION) w_solver.cpp -Ilocallib/include -Llocallib/lib locallib/lib/liblbfgs-1.10.so 
 MixMaxCutSparseAAT.$(MEX_EXT): $(MAXCUTlocal)
 	$(MEX) $(MEX_OPTION) $(MAXCUTlocal) -I$(MAXCUTdir) 
+MixMaxCutComposite.$(MEX_EXT): $(MAXCUTlocal3)
+	$(MEX) $(MEX_OPTION) $(MAXCUTlocal3) -I$(MAXCUTdir) 
 MixMaxCut.$(MEX_EXT): $(MAXCUTlocal2)
 	$(MEX) $(MEX_OPTION) $(MAXCUTlocal2) -I$(MAXCUTdir) 
 all_statistic.$(MEX_EXT):all_statistic.cpp

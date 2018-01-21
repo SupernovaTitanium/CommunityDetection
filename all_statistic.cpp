@@ -117,7 +117,8 @@ void mexFunction(int nlhs,mxArray *plhs[],int nrhs,const mxArray *prhs[]){
 	R_guess = mxGetPr(prhs[2]);
 	Z_true = mxGetPr(prhs[3]);
 	values = mxGetPr(prhs[4]);
-	beta = values[0];
+	beta = values[0];  
+	//beta is actually redundant
 	threshold = mxGetPr(prhs[5]);
     K = mxGetN(prhs[3]);
     level = mxGetN(prhs[5]);

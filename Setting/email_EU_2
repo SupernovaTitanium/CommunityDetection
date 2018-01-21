@@ -1,5 +1,6 @@
 Real
-model = ZW
+model = ZZ^t
+beta = 0.15 
 SNAP_path = snap/examples/bigclam
 SNAP_out = email_Eu
 SNAP_community = 42
@@ -12,7 +13,7 @@ positive_sample_rate = 1
 negative_sample_rate = 10
 threshold_prob_for_link = 0.5 
 iteration_num = 10
-w_solver_lambda = 0.1
+linear_regularization_lambda = 0.1
 c_TOL = 0.00001
 match_tol_rate = 0.01
 inner_iteration_num = 30
