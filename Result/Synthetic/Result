@@ -1,0 +1,46 @@
+mean = -10.000000
+var = 0.000000
+tunningI = 20.000000
+n = 1000.000000
+k = 10.000000
+Z_sparsity = 0.200000
+ground_truth_existence = 1.000000
+noisy = 1.000000
+positive_sample_rate = 1.000000
+negative_sample_rate = 5.000000
+threshold_prob_for_link = 0.500000
+iteration_num = 20.000000
+w_solver_lambda = 0.100000
+c_TOL= 0.000010
+match_tol_rate = 0.010000
+inner_iteration_num = 30.000000
+SDP_rank = 10.000000
+SDP_iter = 100.000000
+mu  = 5000.000000
+stepsize = 0.100000
+mod = 5.000000
+Best nmi occurs at t=0.000000 k=0.000000 value=0.000000
+Best em occurs at t=5.000000 k=2.000000 value=0.125000 and ground_truth_em=0.224867
+mean = -10.000000
+var = 0.000000
+tunningI = 20.000000
+n = 1000.000000
+k = 10.000000
+Z_sparsity = 0.200000
+ground_truth_existence = 1.000000
+noisy = 1.000000
+positive_sample_rate = 1.000000
+negative_sample_rate = 5.000000
+threshold_prob_for_link = 0.500000
+iteration_num = 20.000000
+w_solver_lambda = 0.100000
+c_TOL= 0.000010
+match_tol_rate = 0.010000
+inner_iteration_num = 100.000000
+SDP_rank = 10.000000
+SDP_iter = 100.000000
+mu  = 1000.000000
+stepsize = 0.100000
+mod = 5.000000
+Best nmi occurs at t=0.000000 k=0.000000 value=0.000000
+Best em occurs at t=5.000000 k=2.000000 value=0.125000 and ground_truth_em=0.224867

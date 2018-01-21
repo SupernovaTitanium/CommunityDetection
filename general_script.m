@@ -364,7 +364,7 @@ function [] = general_script(set_file_path)
 		R1 = sparse(Rb.*Sp);
 		R0 = sparse((1-Rb).*Sn);
 		Sr = ones(node,node);
-
+		
 		if(7 ~= exist('Result','dir'))
 			mkdir('Result');
 		end

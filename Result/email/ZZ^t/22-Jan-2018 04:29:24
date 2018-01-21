@@ -1,0 +1,10 @@
+t=5.000000 em=0.000000
+ snap_em=0.412852
+t=5.000000 lf_snap_loss=0.000000 snap_loss=-33228.475563  ground_truth_snap_loss=-3436.246985
+threshold=0.500000 K0=0 acc=0.911581 prec=0.911581 rec=1.000000 F1=0.953746 F1_2=0.476873
+Objective=50210.170538
+t=10.000000 em=0.000000
+ snap_em=0.412852
+t=10.000000 lf_snap_loss=0.000000 snap_loss=-33228.475563  ground_truth_snap_loss=-3436.246985
+threshold=0.500000 K0=0 acc=0.912825 prec=0.912825 rec=1.000000 F1=0.954426 F1_2=0.477213
+Objective=50210.170538

@@ -1,0 +1,54 @@
+snap set communitiy = 42.000000
+ground_truth_existence = 1.000000
+noisy = 1.000000
+positive_sample_rate = 1.000000
+negative_sample_rate = 10.000000
+threshold_prob_for_link = 0.500000
+iteration_num = 10.000000
+linear_regularization_lambda = 0.100000
+c_TOL= 0.000010
+match_tol_rate = 0.010000
+inner_iteration_num = 30.000000
+SDP_rank = 10.000000
+SDP_iter = 100.000000
+mu = 25571.000000
+stepsize = 0.100000
+mod = 5.000000
+Best nmi occurs at t=10.000000 k=4.000000 value=0.029271 snap_k=10.000000 snap_nmi=0.029370
+Best em occurs at t=10.000000 k=4.000000 value=0.027095 and snap_k=10.000000 snap_em=0.012350 ground_truth_em=0.315512
+snap set communitiy = 42.000000
+ground_truth_existence = 1.000000
+noisy = 1.000000
+positive_sample_rate = 1.000000
+negative_sample_rate = 10.000000
+threshold_prob_for_link = 0.500000
+iteration_num = 10.000000
+linear_regularization_lambda = 0.100000
+c_TOL= 0.000010
+match_tol_rate = 0.010000
+inner_iteration_num = 30.000000
+SDP_rank = 10.000000
+SDP_iter = 100.000000
+mu = 25571.000000
+stepsize = 0.100000
+mod = 5.000000
+Best nmi occurs at t=10.000000 k=5.000000 value=0.028602 snap_k=10.000000 snap_nmi=0.029370
+Best em occurs at t=10.000000 k=5.000000 value=0.020222 and snap_k=10.000000 snap_em=0.012350 ground_truth_em=0.315512
+snap set communitiy = 42.000000
+ground_truth_existence = 1.000000
+noisy = 1.000000
+positive_sample_rate = 1.000000
+negative_sample_rate = 10.000000
+threshold_prob_for_link = 0.500000
+iteration_num = 10.000000
+linear_regularization_lambda = 0.100000
+c_TOL= 0.000010
+match_tol_rate = 0.010000
+inner_iteration_num = 30.000000
+SDP_rank = 10.000000
+SDP_iter = 100.000000
+mu = 25571.000000
+stepsize = 0.100000
+mod = 5.000000
+Best nmi occurs at t=10.000000 k=5.000000 value=0.031706 snap_k=42.000000 snap_nmi=0.215534
+Best em occurs at t=10.000000 k=5.000000 value=0.026130 and snap_k=42.000000 snap_em=0.247190 ground_truth_em=0.315512

@@ -161,11 +161,11 @@ for t = 1:T
 			%end
 			%P = [match;c'];
 			%P
-
+			
 			[~,ind] = sort(c,'descend');
 			if(noisy > 0.5)
-				%for K0 = min(2,length(c)):1:length(c)
-				for K0 = length(c):length(c)
+				for K0 = min(2,length(c)):2:length(c)
+				%for K0 = length(c):length(c)
 					Z2 = Z(:,ind(1:min(end,K0)));
 					c2 = c(ind(1:min(end,K0))); 
 					Zc = Z2 * diag(sqrt(c2));
@@ -213,8 +213,8 @@ for t = 1:T
 						end
 					else
 						% compute extended modularity 
-						em = extended_modularity(B,Z2,m);
-		              	fprintf('t=%f em=%f snap_em=%f\n',t,em,em_g(4));
+						em = extended_modularity(B,Zc,m);
+		        fprintf(2,'t=%f em=%f snap_em=%f\n',t,em,em_g(4));
 						fprintf(out,'t=%f em=%f\n snap_em=%f\n',t,em,em_g(4));
 						if(em > em_g(1))
 							em_g(1) = em;
@@ -224,8 +224,8 @@ for t = 1:T
 					end		
 					%print other statistical information
 					lfsnaploss = snap_obj(R, sqrt(z_beta)*Zc);
-					fprintf(2,'t=%f lf_snap_loss=%f snap_loss=%f  ground_truth_snap_loss=%f\n',t,lfsnaploss,snap_loss,true_snap_loss);
-					fprintf(out,'t=%f lf_snap_loss=%f snap_loss=%f  ground_truth_snap_loss=%f\n',t,lfsnaploss,snap_loss,true_snap_loss);
+					fprintf(2,'t=%f lf_snap_loss=%f snap_loss=%f \n',t,lfsnaploss,snap_loss);
+					fprintf(out,'t=%f lf_snap_loss=%f snap_loss=%f \n',t,lfsnaploss,snap_loss);
 					for u=1:length(threshold)
 						fprintf('threshold=%f K0=%d acc=%f prec=%f rec=%f F1=%f F1_2=%f\n',threshold(u),size(Z2,2),acc(u),prec(u),rec(u),F1(u),F1_2(u));
 						% fprintf('threshold=%f K=%d acc=%f prec=%f rec=%f F1=%f F1_2=%f\n',threshold(u),size(Z2,2),acc(u),prec(u),rec(u),F1(u),F1_2(u));

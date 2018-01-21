@@ -1,9 +1,9 @@
 Real
 model = ZZ^t
-beta = 1.0
+beta = 2.0
 SNAP_path = snap/examples/bigclam
 SNAP_out = email
-SNAP_community = 30
+SNAP_community = 5
 data_path = ./Small_data/Email/email.txt
 cluster_path = none
 data_type = email
@@ -16,9 +16,9 @@ iteration_num = 300
 linear_regularization_lambda = 0.005
 c_TOL = 0.00001
 match_tol_rate = 0.01
-inner_iteration_num = 300
+inner_iteration_num = 500
 SDP_rank = 1
 SDP_iter = 1000
-mu_ratio = 0.01
+mu_ratio = 0.05
 stepsize = 1e-3
 mod = 5

@@ -1,0 +1,20 @@
+t=5.000000 nmi=0.026741 snap_nmi=0.029370 em=0.018735 snap_em=0.012350 groundtruth_em=0.315512
+t=5.000000 lf_snap_loss=-5528.783648 snap_loss=-34952.495640  ground_truth_snap_loss=-133963.571563
+threshold=0.500000 K0=2 acc=0.750488 prec=0.750488 rec=1.000000 F1=0.857462 F1_2=0.428731
+t=5.000000 nmi=0.026592 snap_nmi=0.029370 em=0.019009 snap_em=0.012350 groundtruth_em=0.315512
+t=5.000000 lf_snap_loss=-7724.878698 snap_loss=-34952.495640  ground_truth_snap_loss=-133963.571563
+threshold=0.500000 K0=3 acc=0.749088 prec=0.749088 rec=1.000000 F1=0.856547 F1_2=0.428273
+t=5.000000 nmi=0.027130 snap_nmi=0.029370 em=0.025409 snap_em=0.012350 groundtruth_em=0.315512
+t=5.000000 lf_snap_loss=-8569.987654 snap_loss=-34952.495640  ground_truth_snap_loss=-133963.571563
+threshold=0.500000 K0=4 acc=0.750095 prec=0.750095 rec=1.000000 F1=0.857205 F1_2=0.428602
+Objective=109115.750096
+t=10.000000 nmi=0.026741 snap_nmi=0.029370 em=0.018735 snap_em=0.012350 groundtruth_em=0.315512
+t=10.000000 lf_snap_loss=-5528.783648 snap_loss=-34952.495640  ground_truth_snap_loss=-133963.571563
+threshold=0.500000 K0=2 acc=0.749482 prec=0.749482 rec=1.000000 F1=0.856804 F1_2=0.428402
+t=10.000000 nmi=0.026592 snap_nmi=0.029370 em=0.019009 snap_em=0.012350 groundtruth_em=0.315512
+t=10.000000 lf_snap_loss=-7724.878698 snap_loss=-34952.495640  ground_truth_snap_loss=-133963.571563
+threshold=0.500000 K0=3 acc=0.749960 prec=0.749960 rec=1.000000 F1=0.857117 F1_2=0.428558
+t=10.000000 nmi=0.029271 snap_nmi=0.029370 em=0.027095 snap_em=0.012350 groundtruth_em=0.315512
+t=10.000000 lf_snap_loss=-8971.347913 snap_loss=-34952.495640  ground_truth_snap_loss=-133963.571563
+threshold=0.500000 K0=4 acc=0.750129 prec=0.750129 rec=1.000000 F1=0.857227 F1_2=0.428613
+Objective=109088.471496
