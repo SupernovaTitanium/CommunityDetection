@@ -259,7 +259,8 @@ function [] = general_script(set_file_path)
 		Rb = sparse(data_tmp(:,1),data_tmp(:,2),v1,node,node);	
 		Rb1 = full(Rb);	
 		C = strsplit(data_path,'.');
-		snap_data = strcat(C{3},'_snap.txt');
+		snap_data = strcat(C{2},'_snap.txt');
+		snap_data = snap_data(2:end);
 		if exist(snap_data, 'file') ~= 2
 			fprintf(2,'write the data to %s for snap usage\n',snap_data);
 			fid5 = fopen(snap_data,'w+');
@@ -335,7 +336,8 @@ function [] = general_script(set_file_path)
 		Rb = sparse(data_tmp(:,1),data_tmp(:,2),data_tmp(:,3),node,node);
 		Rb1 = full(Rb);	
 		C = strsplit(data_path,'.');
-		snap_data = strcat(C{3},'_snap.txt');
+		snap_data = strcat(C{2},'_snap.txt');
+		snap_data = snap_data(2:end);
 		if exist(snap_data, 'file') ~= 2
 			fprintf(2,'write the data to %s for snap usage\n',snap_data);
 			fid5 = fopen(snap_data,'w+');
