@@ -59,7 +59,7 @@ true_snap_loss = snap_obj(R_true,Z_true);
 f = @(Z1,z0,thd) sum( Z1~=(z0*ones(1,size(Z1,2))) ) <= thd;
 
 M = zeros(n);
-
+prev_obj = 1e300;
 for t = 1:T
 	t
 	%find greedy direction & add to active set
@@ -147,17 +147,25 @@ for t = 1:T
 			%M = compute_M(c,Z);
 			%obj = boolLassoObj(R,lambda,M,c, z_beta);
 			obj = boolLassoObjSparse(R,mu,Z,c, z_beta);
-			['t=' num2str(t) ', obj=' num2str(obj)]
-			match = zeros(1,length(c));
-			for k = 1:size(Z_true,2)
-					match_k = f(Z,Z_true(:,k),n*tol_rate);
-					match(match_k>0)=k;
+			['t=' num2str(t) ', obj=' num2str(obj) ', stepsize=' num2str(stepsize)]
+			if obj > prev_obj
+					'obj incrased'
+					return;
 			end
-			P = [match;c'];
-			P
+			prev_obj = obj;
+
+			%match = zeros(1,length(c));
+			%for k = 1:size(Z_true,2)
+			%		match_k = f(Z,Z_true(:,k),n*tol_rate);
+			%		match(match_k>0)=k;
+			%end
+			%P = [match;c'];
+			%P
+
 			[~,ind] = sort(c,'descend');
 			if(noisy > 0.5)
-				for K0 = min(2,length(c)):1:length(c)
+				%for K0 = min(2,length(c)):1:length(c)
+				for K0 = length(c):length(c)
 					Z2 = Z(:,ind(1:min(end,K0)));
 					c2 = c(ind(1:min(end,K0))); 
 					Zc = Z2 * diag(sqrt(c2));
@@ -215,7 +223,7 @@ for t = 1:T
 						end
 					end		
 					%print other statistical information
-					lfsnaploss = snap_obj(R_true,Z2);
+					lfsnaploss = snap_obj(R, sqrt(z_beta)*Zc);
 					fprintf(2,'t=%f lf_snap_loss=%f snap_loss=%f  ground_truth_snap_loss=%f\n',t,lfsnaploss,snap_loss,true_snap_loss);
 					fprintf(out,'t=%f lf_snap_loss=%f snap_loss=%f  ground_truth_snap_loss=%f\n',t,lfsnaploss,snap_loss,true_snap_loss);
 					for u=1:length(threshold)
@@ -305,15 +313,15 @@ function c2 = prox( c, mu )
 	c2(c<=mu)=0;
 	c2(c>mu) = c(c>mu)-mu;
 end
-function [sobj] = snap_obj(Z,R_true)
+function [sobj] = snap_obj(R_true, Z)
 	sobj=0;
 	[I1,J1,V1] = find(R_true);
 	E_1 = sum(Z(I1,:).*Z(J1,:),2);
 	E_1 = 1-exp(-E_1);
-	E_1 = max(E_1, 1e-10);
+	E_1 = E_1 + 1e-10;
 	E_1 = sum(log(E_1));
 	[I1,J1,V1] = find(1-R_true);
 	E_2 = sum(sum(Z(I1,:).*Z(J1,:),2));
-	sobj = E_1-E_2;
+	sobj = E_2-E_1;
 end
 

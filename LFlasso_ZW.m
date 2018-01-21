@@ -299,7 +299,7 @@ function [obj,R_guess,W_o] = LFLassoObj(R0_sp,R1_sp,lambda,Z,c)
 	obj = sum(sum(-R.*log(1./(1+exp(-E)))-(1-R).*log(1-1./(1+exp(-E)))))+0.5*lambda*norm(W_o,'fro')^2;
 end
 
-function [sobj] = snap_obj(Z,R_true)
+function [sobj] = snap_obj(R_true,Z)
 	sobj=0;
 	[I1,J1,V1] = find(R_true);
 	E_1 = sum(Z(I1,:).*Z(J1,:),2);
