@@ -41,7 +41,7 @@ bool comparepair(std::pair<double,int> b1, std::pair<double,int> b2)
 {
     return b1.first >= b2.first;
 }
-void statistic(double* R,double* R_test,double* R_guess,double* Z_true,double* threshold,int N,int K,int level,double* acc,double* rec,double* pre,double* F1,double* F1_2,double* auc)
+void statistic(double* R,double* R_test,double* R_guess,double* threshold,int N,int level,double* acc,double* rec,double* pre,double* F1,double* F1_2,double* auc)
 {
   	// printf("fuck\n");	
 	for(int i=0;i<level;i++){
@@ -102,26 +102,22 @@ void statistic(double* R,double* R_test,double* R_guess,double* Z_true,double* t
 }
 void usage()
 {
-	mexErrMsgTxt("Usage:function [acc rec prec F1 F1_2 auc] = all_statistic(R,R_test,R_guess,Z_true,beta,threshold)");
+	mexErrMsgTxt("Usage:function [acc rec prec F1 F1_2 auc] = all_statistic(R,R_test,R_guess,threshold)");
 }
 void mexFunction(int nlhs,mxArray *plhs[],int nrhs,const mxArray *prhs[]){
-	double *R,*R_test,*Z_true;
-	double *R_guess,*values,*threshold;
-	int N,K,level;
+	double *R,*R_test;
+	double *R_guess,*threshold;
+	int N,level;
 	double beta;
-	if (nrhs!=6)
+	if (nrhs!=4)
 		usage();
 	R = mxGetPr(prhs[0]);
 	N = mxGetM(prhs[0]);
 	R_test = mxGetPr(prhs[1]);
 	R_guess = mxGetPr(prhs[2]);
-	Z_true = mxGetPr(prhs[3]);
-	values = mxGetPr(prhs[4]);
-	beta = values[0];  
 	//beta is actually redundant
-	threshold = mxGetPr(prhs[5]);
-    K = mxGetN(prhs[3]);
-    level = mxGetN(prhs[5]);
+	threshold = mxGetPr(prhs[3]);
+    level = mxGetN(prhs[3]);
     //V,alpha,objGCD
 	plhs[0]=mxCreateDoubleMatrix(level,1,mxREAL);
 	plhs[1]=mxCreateDoubleMatrix(level,1,mxREAL);
@@ -129,5 +125,5 @@ void mexFunction(int nlhs,mxArray *plhs[],int nrhs,const mxArray *prhs[]){
 	plhs[3]=mxCreateDoubleMatrix(level,1,mxREAL);
 	plhs[4]=mxCreateDoubleMatrix(level,1,mxREAL);
 	plhs[5]=mxCreateDoubleMatrix(1,1,mxREAL);
-	statistic(R,R_test,R_guess,Z_true,threshold,N,K,level,mxGetPr(plhs[0]),mxGetPr(plhs[1]),mxGetPr(plhs[2]),mxGetPr(plhs[3]),mxGetPr(plhs[4]),mxGetPr(plhs[5]));
+	statistic(R,R_test,R_guess,threshold,N,level,mxGetPr(plhs[0]),mxGetPr(plhs[1]),mxGetPr(plhs[2]),mxGetPr(plhs[3]),mxGetPr(plhs[4]),mxGetPr(plhs[5]));
 }
